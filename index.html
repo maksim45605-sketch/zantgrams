@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ZanTGrams</title>
+  </head>
+  <body class="bg-tgDark text-tgText">
+    <div id="root"></div>
+    <script>
+      // Prevent "gray screen" by surfacing errors even before React boots.
+      (function () {
+        function show(msg) {
+          try {
+            var el = document.getElementById('root');
+            if (!el) return;
+            if (el.__fatalShown) return;
+            el.__fatalShown = true;
+            el.innerHTML =
+              '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#0f1720;color:#e6edf3;font-family:ui-sans-serif,system-ui">' +
+              '  <div style="max-width:900px;width:100%;background:#111c27;border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px 18px 14px;box-shadow:0 10px 30px rgba(0,0,0,.35)">' +
+              '    <div style="font-weight:700;margin-bottom:6px">ZanTGrams: ошибка загрузки</div>' +
+              '    <div style="opacity:.85;margin-bottom:12px">Открой DevTools → Console. Обычно причина — Firebase домен/Rules или JS ошибка.</div>' +
+              '    <pre style="white-space:pre-wrap;word-break:break-word;background:#0b1220;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;max-height:45vh;overflow:auto"></pre>' +
+              '    <button onclick="location.reload()" style="margin-top:12px;background:#3b82f6;color:white;border:0;border-radius:12px;padding:10px 14px;font-weight:600;cursor:pointer">Перезагрузить</button>' +
+              '  </div>' +
+              '</div>';
+            el.querySelector('pre').textContent = msg;
+          } catch (_) {}
+        }
+
+        window.addEventListener('error', function (e) {
+          // Resource load error (script/css 404) has no stack, show target URL.
+          var msg = (e && e.error && (e.error.stack || e.error.message))
+            ? (e.error.stack || e.error.message)
+            : (e && e.target && e.target.src ? ('Resource failed: ' + e.target.src) : String(e.message || e));
+          show(msg);
+        }, true);
+
+        window.addEventListener('unhandledrejection', function (e) {
+          var r = e && e.reason;
+          var msg = r && (r.stack || r.message) ? (r.stack || r.message) : String(r);
+          show('Unhandled promise rejection:\n' + msg);
+        });
+      })();
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
